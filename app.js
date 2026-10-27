@@ -2,7 +2,7 @@ const ROW_LABEL = Object.fromEntries(window.LIBRARY.rows.map((row) => [row.id, r
 const POSITION_LABEL = Object.fromEntries(window.LIBRARY.positions.map((position) => [position.id, position.name]));
 
 const books = window.LIBRARY.catalog;
-const state = { query: "", cabinet: "", row: "", position: "" };
+const state = { query: "", authorId: "", cabinetId: "", shelfId: "", rowId: "", positionId: "", seriesId: "" };
 
 const queryInput = document.getElementById("query");
 const filtersEl = document.getElementById("filters");
@@ -23,9 +23,9 @@ function matches(book) {
     .join(" ")
     .toLowerCase();
   if (q && !haystack.includes(q)) return false;
-  if (state.cabinet && book.cabinet !== state.cabinet) return false;
-  if (state.row && book.row !== state.row) return false;
-  if (state.position && book.position !== state.position) return false;
+  for (const key of ["authorId", "cabinetId", "shelfId", "rowId", "positionId", "seriesId"]) {
+    if (state[key] && book[key] !== state[key]) return false;
+  }
   return true;
 }
 
@@ -44,33 +44,54 @@ function unique(values) {
 }
 
 function renderFilters() {
-  const chips = [];
-  unique(books.map((book) => book.cabinet)).forEach((cabinet) => {
-    chips.push({ key: "cabinet", value: cabinet, label: cabinet });
-  });
-  ["front", "back"].forEach((row) => {
-    if (books.some((book) => book.row === row)) {
-      chips.push({ key: "row", value: row, label: labelRow(row) });
-    }
-  });
-  ["left", "center", "right"].forEach((position) => {
-    if (books.some((book) => book.position === position)) {
-      chips.push({ key: "position", value: position, label: labelPosition(position) });
-    }
-  });
-
+  const fields = [
+    { key: "authorId", kind: "authors", label: "Автор", all: "Все авторы" },
+    { key: "cabinetId", kind: "cabinets", label: "Шкаф", all: "Все места хранения" },
+    { key: "shelfId", kind: "shelves", label: "Полка", all: "Все полки" },
+    { key: "rowId", kind: "rows", label: "Ряд", all: "Все ряды" },
+    { key: "positionId", kind: "positions", label: "Положение", all: "Все положения" },
+    { key: "seriesId", kind: "series", label: "Серия", all: "Все серии" },
+  ];
   filtersEl.innerHTML = "";
-  chips.forEach((chip) => {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.textContent = chip.label;
-    button.className = state[chip.key] === chip.value ? "active" : "";
-    button.addEventListener("click", () => {
-      state[chip.key] = state[chip.key] === chip.value ? "" : chip.value;
+  fields.forEach((field) => {
+    const label = document.createElement("label");
+    label.className = "filter-field";
+    const caption = document.createElement("span");
+    caption.textContent = field.label;
+    const select = document.createElement("select");
+    select.id = `filter-${field.key}`;
+    const all = document.createElement("option");
+    all.value = "";
+    all.textContent = field.all;
+    select.appendChild(all);
+    [...window.LIBRARY[field.kind]]
+      .sort((a, b) => a.name.localeCompare(b.name, "ru", { numeric: true }))
+      .forEach((entity) => {
+        const option = document.createElement("option");
+        option.value = entity.id;
+        option.textContent = entity.name;
+        select.appendChild(option);
+      });
+    select.value = state[field.key];
+    select.addEventListener("change", () => {
+      state[field.key] = select.value;
       render();
     });
-    filtersEl.appendChild(button);
+    label.appendChild(caption);
+    label.appendChild(select);
+    filtersEl.appendChild(label);
   });
+  const reset = document.createElement("button");
+  reset.type = "button";
+  reset.className = "reset-filters";
+  reset.textContent = "Сбросить фильтры";
+  reset.addEventListener("click", () => {
+    Object.keys(state).forEach((key) => { state[key] = ""; });
+    queryInput.value = "";
+    renderFilters();
+    render();
+  });
+  filtersEl.appendChild(reset);
 }
 
 function card(book) {
@@ -106,8 +127,15 @@ function card(book) {
 
 function render() {
   const found = books.filter(matches);
-  countEl.textContent = books.length ? bookCount(found.length) : "пока пусто";
-  renderFilters();
+  countEl.textContent = "";
+  if (books.length) {
+    const number = document.createElement("strong");
+    number.textContent = String(found.length);
+    countEl.appendChild(number);
+    countEl.appendChild(document.createTextNode(bookCount(found.length).slice(String(found.length).length)));
+  } else {
+    countEl.textContent = "пока пусто";
+  }
   resultsEl.innerHTML = "";
 
   if (!found.length) {
@@ -155,4 +183,5 @@ queryInput.addEventListener("input", () => {
   render();
 });
 
+renderFilters();
 render();
