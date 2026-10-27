@@ -1,7 +1,7 @@
-const ROW_LABEL = { front: "передний ряд", back: "задний ряд" };
-const POSITION_LABEL = { left: "слева", center: "по центру", right: "справа" };
+const ROW_LABEL = Object.fromEntries(window.LIBRARY.rows.map((row) => [row.id, row.name]));
+const POSITION_LABEL = Object.fromEntries(window.LIBRARY.positions.map((position) => [position.id, position.name]));
 
-const books = (window.LIBRARY && window.LIBRARY.books) || [];
+const books = window.LIBRARY.catalog;
 const state = { query: "", cabinet: "", row: "", position: "" };
 
 const queryInput = document.getElementById("query");
