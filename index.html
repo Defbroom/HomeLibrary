@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Домашняя библиотека</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <p class="eyebrow">Домашняя библиотека</p>
+      <h1>Где лежит книга</h1>
+    </div>
+    <p class="count" id="count"></p>
+  </header>
+
+  <section class="search-panel">
+    <label class="search">
+      <span class="visually-hidden">Поиск</span>
+      <input id="query" type="search" placeholder="Название, автор или шкаф" autocomplete="off" />
+    </label>
+    <div class="filters" id="filters"></div>
+  </section>
+
+  <main id="results"></main>
+
+  <script src="data/books.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

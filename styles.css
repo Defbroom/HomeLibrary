@@ -1,0 +1,177 @@
+:root {
+  --ink: #1c1915;
+  --muted: #6b6258;
+  --paper: #f6f1e8;
+  --card: #fffdf8;
+  --line: #e4d9c8;
+  --accent: #8c3a2f;
+  --chip: #efe6d8;
+  --shadow: 0 10px 30px rgba(60, 40, 20, 0.06);
+  font-family: "Segoe UI", "Iowan Old Style", Palatino, Georgia, serif;
+  color: var(--ink);
+  background: var(--paper);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0 auto;
+  max-width: 980px;
+  padding: 32px 20px 64px;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.eyebrow {
+  margin: 0 0 4px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-size: 12px;
+  color: var(--accent);
+  font-family: "Segoe UI", sans-serif;
+}
+
+h1 {
+  margin: 0;
+  font-weight: 560;
+  font-size: 40px;
+  letter-spacing: -0.03em;
+}
+
+.count {
+  margin: 0;
+  color: var(--muted);
+  font-family: "Segoe UI", sans-serif;
+}
+
+.search-panel {
+  margin-bottom: 28px;
+}
+
+.search input {
+  width: 100%;
+  border: 1px solid var(--line);
+  background: var(--card);
+  border-radius: 14px;
+  padding: 16px 18px;
+  font: 18px/1.3 "Segoe UI", sans-serif;
+  color: var(--ink);
+  box-shadow: var(--shadow);
+}
+
+.search input:focus {
+  outline: 2px solid #c98578;
+  border-color: transparent;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.filters button {
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font: 13px/1.2 "Segoe UI", sans-serif;
+  cursor: pointer;
+}
+
+.filters button.active {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+
+.group {
+  margin-bottom: 28px;
+}
+
+.group h2 {
+  margin: 0 0 12px;
+  font-size: 18px;
+  font-weight: 600;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.shelf {
+  margin-bottom: 16px;
+}
+
+.shelf h3 {
+  margin: 0 0 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+  font-family: "Segoe UI", sans-serif;
+}
+
+.cards {
+  display: grid;
+  gap: 10px;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 16px 18px;
+  box-shadow: var(--shadow);
+}
+
+.card h4 {
+  margin: 0 0 4px;
+  font-size: 22px;
+  font-weight: 560;
+}
+
+.author {
+  margin: 0 0 12px;
+  color: var(--muted);
+  font-family: "Segoe UI", sans-serif;
+}
+
+.place {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.place span {
+  background: var(--chip);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font: 13px/1.3 "Segoe UI", sans-serif;
+}
+
+.empty {
+  padding: 48px 8px;
+  color: var(--muted);
+  font-size: 18px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+@media (max-width: 640px) {
+  h1 { font-size: 32px; }
+  .top { align-items: flex-start; flex-direction: column; }
+}
