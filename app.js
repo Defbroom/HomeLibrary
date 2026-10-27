@@ -19,7 +19,7 @@ function labelPosition(value) {
 
 function matches(book) {
   const q = state.query.trim().toLowerCase();
-  const haystack = [book.title, book.author, book.cabinet, book.shelf]
+  const haystack = [book.title, book.author, book.cabinet, book.shelf, book.notes, book.series]
     .join(" ")
     .toLowerCase();
   if (q && !haystack.includes(q)) return false;
@@ -84,12 +84,23 @@ function card(book) {
     </div>
   `;
   article.querySelector("h4").textContent = book.title;
-  article.querySelector(".author").textContent = book.author;
+  article.querySelector(".author").textContent = book.author || "Автор не указан";
   const places = article.querySelectorAll(".place span");
   places[0].textContent = book.cabinet;
-  places[1].textContent = book.shelf;
-  places[2].textContent = labelRow(book.row);
-  places[3].textContent = labelPosition(book.position);
+  places[1].textContent = book.shelf || "Полка не указана";
+  places[2].textContent = book.row ? labelRow(book.row) : "Ряд не указан";
+  places[3].textContent = book.position ? labelPosition(book.position) : "Положение не указано";
+  const details = [
+    book.series && `Серия: ${book.series}`,
+    book.notes && `Примечание: ${book.notes}`,
+    book.rare && "Раритет",
+  ].filter(Boolean);
+  details.forEach((text) => {
+    const detail = document.createElement("p");
+    detail.className = "detail";
+    detail.textContent = text;
+    article.appendChild(detail);
+  });
   return article;
 }
 
@@ -118,7 +129,7 @@ function render() {
     group.appendChild(heading);
 
     const shelves = unique(
-      found.filter((book) => book.cabinet === cabinet).map((book) => book.shelf)
+      found.filter((book) => book.cabinet === cabinet).map((book) => book.shelf || "Полка не указана")
     );
     shelves.forEach((shelf) => {
       const block = document.createElement("div");
@@ -129,7 +140,7 @@ function render() {
       const list = document.createElement("div");
       list.className = "cards";
       found
-        .filter((book) => book.cabinet === cabinet && book.shelf === shelf)
+        .filter((book) => book.cabinet === cabinet && (book.shelf || "Полка не указана") === shelf)
         .forEach((book) => list.appendChild(card(book)));
       block.appendChild(list);
       group.appendChild(block);
