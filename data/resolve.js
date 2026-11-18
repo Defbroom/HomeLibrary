@@ -30,6 +30,7 @@
     if (!cabinet) throw new Error(`Не указан шкаф книги ${book.id}`);
     return {
       ...book,
+      title: book.title ?? "Без названия",
       author: author ? author.name : "",
       cabinet: cabinet.name,
       shelf: shelf ? shelf.name : "",

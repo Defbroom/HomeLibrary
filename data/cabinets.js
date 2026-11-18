@@ -24,5 +24,9 @@ window.LIBRARY.cabinets = [
   {
     "id": "cabinet-0006",
     "name": "Шкаф в зале 1"
+  },
+  {
+    "id": "cabinet-0007",
+    "name": "Шкаф в зале 2"
   }
 ];
